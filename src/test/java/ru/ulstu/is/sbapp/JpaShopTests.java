@@ -8,9 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import ru.ulstu.is.sbapp.shop.model.Customer;
 import ru.ulstu.is.sbapp.shop.service.CustomerService;
+import ru.ulstu.is.sbapp.shop.service.ShopNotFoundException;
+import ru.ulstu.is.sbapp.shop.service.CustomerNotFoundException;
 import ru.ulstu.is.sbapp.shop.model.Shop;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 @SpringBootTest
 public class JpaShopTests {
@@ -42,7 +43,7 @@ public class JpaShopTests {
     @Test
     void testCustomerReadNotFound() {
         customerService.deleteAllCustomers();
-        Assertions.assertThrows(EntityNotFoundException.class, () -> customerService.findCustomer(-1L));
+        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerService.findCustomer(-1L));
 
     }
 
@@ -94,7 +95,7 @@ public class JpaShopTests {
     void testShopReadNotFound() {
         customerService.deleteAllShops();
         customerService.deleteAllCustomers();
-        Assertions.assertThrows(EntityNotFoundException.class, () -> customerService.findShop(-1L));
+        Assertions.assertThrows(ShopNotFoundException.class, () -> customerService.findShop(-1L));
 
     }
 

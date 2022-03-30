@@ -1,12 +1,5 @@
 package ru.ulstu.is.sbapp.shop.controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import ru.ulstu.is.sbapp.shop.model.Customer;
 import ru.ulstu.is.sbapp.shop.model.Shop;
@@ -18,7 +11,7 @@ import java.util.List;
 @RequestMapping("/customer")
 public class CustomerController {
     private final CustomerService customerService;
-    public CustomerController(CustomerService customerService) {
+    /*public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
@@ -50,9 +43,44 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public Customer deleteCustomer(@PathVariable Long id) {
         return customerService.deleteCustomer(id);
+    }*/
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
-    @GetMapping("/c{id}")
+    @GetMapping("/{id}")
+    public CustomerDto getCustomer(@PathVariable Long id) {
+        return new CustomerDto(customerService.findCustomer(id));
+    }
+
+    @GetMapping("/")
+    public List<CustomerDto> getCustomers() {
+        return customerService.findAllCustomers().stream()
+                .map(CustomerDto::new)
+                .toList();
+    }
+
+    @PostMapping("/")
+    public CustomerDto createCustomer(@RequestParam("firstName") String firstName,
+                                    @RequestParam("lastName") String lastName,
+                                       @RequestParam("phoneNumb") int phoneNumb) {
+        return new CustomerDto(customerService.addCustomer(firstName, lastName, phoneNumb));
+    }
+
+    @PutMapping("/{id}")
+    public CustomerDto updateCustomer(@PathVariable Long id,
+                                    @RequestParam("firstName") String firstName,
+                                    @RequestParam("lastName") String lastName,
+                                      @RequestParam("phoneNumb") int phoneNumb) {
+        return new CustomerDto(customerService.updateCustomer(id, firstName, lastName, phoneNumb));
+    }
+
+    @DeleteMapping("/{id}")
+    public CustomerDto deleteCustomer(@PathVariable Long id) {
+        return new CustomerDto(customerService.deleteCustomer(id));
+    }
+
+    /*@GetMapping("/c{id}")
     public Shop getShop(@PathVariable Long id) {
         return customerService.findShop(id);
     }
@@ -91,6 +119,6 @@ public class CustomerController {
     @DeleteMapping("/c{id}")
     public Shop deleteShop(@PathVariable Long id) {
         return customerService.deleteShop(id);
-    }
+    }*/
 }
 
