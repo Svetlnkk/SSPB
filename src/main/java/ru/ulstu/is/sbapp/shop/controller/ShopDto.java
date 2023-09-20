@@ -1,26 +1,37 @@
 package ru.ulstu.is.sbapp.shop.controller;
-import ru.ulstu.is.sbapp.shop.model.Customer;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.ulstu.is.sbapp.shop.model.Shop;
-public class ShopDto {
-    private final long id;
-    private final String name;
-    private final int cost;
-    private final long customer_id;
 
+import javax.validation.constraints.NotBlank;
+
+public class ShopDto {
+    private  long id;
+    @NotBlank(message = "Name product can't be null or empty")
+    private  String nameProduct;
+    @NotBlank(message = "Type order can't be null or empty")
+    private  String typeOrder;
+    private  int cost;
+    public ShopDto(){
+
+    }
     public ShopDto(Shop shop) {
         this.id = shop.getId();
-        this.name = String.format("%s %s", shop.getNameProduct(), shop.getTypeOrder());
+        this.nameProduct= shop.getNameProduct();;
+        this.typeOrder=shop.getTypeOrder();
         this.cost= shop.getCost();
-        this.customer_id=shop.getCustomer();
     }
-
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getNameProduct() {
+        return nameProduct;
     }
+    public void setNameProduct(String nameProduct){this.nameProduct=nameProduct;}
+    public String getTypeOrder(){return typeOrder;}
+    public void setTypeOrder(String typeOrder){this.typeOrder=typeOrder;}
     public int getCost(){return cost;}
-    public long getCustomer_id(){return customer_id;}
+    public void setCost(int cost){this.cost=cost;}
+
 }

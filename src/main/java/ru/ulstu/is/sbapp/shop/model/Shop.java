@@ -1,5 +1,6 @@
 package ru.ulstu.is.sbapp.shop.model;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,32 +10,22 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column()
+    @NotBlank(message = "Name product can't be null or empty")
     String NameProduct;
+    @NotBlank(message = "Type order can't be null or empty")
     String TypeOrder;
     int cost;
-    Long customer_id;
-    public Long getCustomer(){
-        return customer_id;
-    }
-    public void setCustomer(Long customer_id){
-        this.customer_id=customer_id;
-    }
-    @ManyToMany
-    private List<Shop> customer;
+    @ManyToMany(mappedBy = "shop")
+    private List<Customer> customer;
     public Shop(){
 
     }
-    public Shop(String TypeOrder, String NameProduct, int cost, Long customer_id){
+    public Shop(String TypeOrder, String NameProduct, int cost){
         this.TypeOrder=TypeOrder;
         this.NameProduct=NameProduct;
         this.cost=cost;
-        this.customer_id=customer_id;
     }
     public Long getId(){return id;}
-    public void setId(Long id){
-        this.id=id;
-    }
     public String getTypeOrder(){
         return TypeOrder;
     }
@@ -73,7 +64,6 @@ public class Shop {
                 ", nameProduct='" + NameProduct + '\'' +
                 ", typeOrder='" + TypeOrder + '\'' +
                 ", cost='" + cost + '\'' +
-                ", customer'" + customer_id + '\'' +
                 '}';
     }
 }

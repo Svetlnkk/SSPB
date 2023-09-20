@@ -11,6 +11,7 @@ import ru.ulstu.is.sbapp.shop.service.CustomerService;
 import ru.ulstu.is.sbapp.shop.service.ShopNotFoundException;
 import ru.ulstu.is.sbapp.shop.service.CustomerNotFoundException;
 import ru.ulstu.is.sbapp.shop.model.Shop;
+import ru.ulstu.is.sbapp.shop.service.ShopService;
 
 import java.util.List;
 @SpringBootTest
@@ -67,12 +68,13 @@ public class JpaShopTests {
 
     }
 
+    @Autowired
+    private ShopService shopService;
+
     @Test
     void testShopCreate() {
-        customerService.deleteAllShops();
-        customerService.deleteAllCustomers();
-        Long customer=customerService.addCustomer("Иван", "Иванов", 456608).getId();
-        final Shop shop = customerService.addShop("молоко", "еда", 85, customer);
+        shopService.deleteAllShops();
+        final Shop shop = shopService.addShop("молоко", "еда", 85);
         log.info(shop.toString());
         Assertions.assertNotNull(shop.getId());
 
@@ -80,12 +82,10 @@ public class JpaShopTests {
 
     @Test
     void testShopRead() {
-        customerService.deleteAllShops();
-        customerService.deleteAllCustomers();
-        Customer customer=customerService.addCustomer("Иван", "Иванов", 456608);
-        final Shop shop = customerService.addShop("молоко", "еда", 85, customer.getId());
+        shopService.deleteAllShops();
+        final Shop shop = shopService.addShop("молоко", "еда", 85);
         log.info(shop.toString());
-        final Shop findShop = customerService.findShop(shop.getId());
+        final Shop findShop = shopService.findShop(shop.getId());
         log.info(findShop.toString());
         Assertions.assertEquals(shop, findShop);
 
@@ -93,20 +93,17 @@ public class JpaShopTests {
 
     @Test
     void testShopReadNotFound() {
-        customerService.deleteAllShops();
-        customerService.deleteAllCustomers();
-        Assertions.assertThrows(ShopNotFoundException.class, () -> customerService.findShop(-1L));
+        shopService.deleteAllShops();
+        Assertions.assertThrows(ShopNotFoundException.class, () -> shopService.findShop(-1L));
 
     }
 
     @Test
     void testShopReadAll() {
-        customerService.deleteAllShops();
-        customerService.deleteAllCustomers();
-        Customer customer=customerService.addCustomer("Иван", "Иванов", 456608);
-        customerService.addShop("молоко", "еда", 85, customer.getId());
-        customerService.addShop("помада", "косметика", 1299, customer.getId());
-        final List<Shop> shops = customerService.findAllShops();
+        shopService.deleteAllShops();
+        shopService.addShop("молоко", "еда", 85);
+        shopService.addShop("помада", "косметика", 1299);
+        final List<Shop> shops = shopService.findAllShops();
         log.info(shops.toString());
         Assertions.assertEquals(shops.size(), 2);
 
@@ -114,9 +111,8 @@ public class JpaShopTests {
 
     @Test
     void testShopReadAllEmpty() {
-        customerService.deleteAllShops();
-        customerService.deleteAllCustomers();
-        final List<Shop> shops = customerService.findAllShops();
+        shopService.deleteAllShops();
+        final List<Shop> shops = shopService.findAllShops();
         log.info(shops.toString());
         Assertions.assertEquals(shops.size(), 0);
 

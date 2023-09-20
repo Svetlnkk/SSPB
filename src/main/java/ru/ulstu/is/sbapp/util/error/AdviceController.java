@@ -5,13 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import ru.ulstu.is.sbapp.shop.service.CustomerNotFoundException;
 import ru.ulstu.is.sbapp.util.validation.ValidationException;
 import ru.ulstu.is.sbapp.shop.service.ShopNotFoundException;
 
 import java.util.stream.Collectors;
 
-@ControllerAdvice
+@ControllerAdvice(annotations = RestController.class)
 public class AdviceController {
     @ExceptionHandler({
             CustomerNotFoundException.class,
