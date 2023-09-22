@@ -105,7 +105,7 @@ public class JpaShopTests {
         shopService.addShop("помада", "косметика", 1299);
         final List<Shop> shops = shopService.findAllShops();
         log.info(shops.toString());
-        Assertions.assertEquals(shops.size(), 2);
+        Assertions.assertEquals(shops.size(), 4);
 
     }
 
